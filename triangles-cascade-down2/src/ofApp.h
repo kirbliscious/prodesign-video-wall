@@ -26,7 +26,7 @@ class ofApp : public ofBaseApp{
         ofColor colors[5];
         ofColor tritwo_colors[5];
         ofColor previouscolor, tritwo_previouscolor;
-        int c, batch;
+        int c, batch, batchprev;
     
         bool state1, state2, state3, stateswitch;
 };

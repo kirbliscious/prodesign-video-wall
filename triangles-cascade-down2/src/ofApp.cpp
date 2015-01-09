@@ -46,20 +46,23 @@ void ofApp::setup(){
     tritwo_blc.set(0, square); tritwo_sblc.set(0, square);
     tritwo_brc.set(square, square); tritwo_sbrc.set(square, square);
     
-
+    //batch
+    batch = 0;
+    batchprev = -1;
     
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    trione_tlc.x++;
-    trione_tlc.y++;
+    trione_tlc.x+=5;
+    trione_tlc.y+=5;
     
     if (trione_tlc.y > center.y) {
         trione_tlc.set(0, 0);
         stateswitch = true;
         batch++;
+        batchprev++;
     }
     
     if (stateswitch) {
@@ -133,23 +136,63 @@ void ofApp::draw(){
 //    }
     
     //sequential
+    for (int i=0; i<=squaretotalX; i++) {
+        for (int j=0; j<=squaretotalY; j++) {
+            ofPushMatrix();
+            ofTranslate(square*i, square*j);
+                // TRI ONE
+                ofSetColor(colors[2]);
+                ofBeginShape();
+                    ofVertex(stlc.x, stlc.y);
+                    ofVertex(strc.x, strc.y);
+                    ofVertex(sblc.x, sblc.y);
+                ofEndShape();
+
+                // TRI TWO
+                ofSetColor(colors[2]);
+                ofBeginShape();
+                    ofVertex(tritwo_sbrc);
+                    ofVertex(tritwo_sblc);
+                    ofVertex(tritwo_strc);
+                ofEndShape();
+            
+            ofPopMatrix();
+        }
+    }
+    
+    for (int k=0; k<=batchprev; k++) {
+        for (int l=(batchprev-k); l>=0; l--) {
+            ofPushMatrix();
+            ofTranslate(square*k, square*l);
+                ofSetColor(colors[1]);
+                    ofBeginShape();
+                    ofVertex(stlc.x, stlc.y);
+                    ofVertex(strc.x, strc.y);
+                    ofVertex(sblc.x, sblc.y);
+                ofEndShape();
+            ofPopMatrix();
+        }
+    }
+
+    
     for (int k=0; k<=batch; k++) {
         ofPushMatrix();
         ofTranslate(square*k, square*(batch-k));
-            ofSetColor(colors[c]);
+            //static
+            ofSetColor(colors[1]);
             ofBeginShape();
-            ofVertex(stlc.x, stlc.y);
-            ofVertex(strc.x, strc.y);
-            ofVertex(sblc.x, sblc.y);
+                ofVertex(stlc.x, stlc.y);
+                ofVertex(strc.x, strc.y);
+                ofVertex(sblc.x, sblc.y);
             ofEndShape();
-            
-            ofSetColor(previouscolor);
+        
+            //dynamic
+            ofSetColor(colors[2]);
             ofBeginShape();
-            ofVertex(trione_tlc.x, trione_tlc.y);
-            ofVertex(trione_trc.x, trione_trc.y);
-            ofVertex(trione_blc.x, trione_blc.y);
+                ofVertex(trione_tlc.x, trione_tlc.y);
+                ofVertex(trione_trc.x, trione_trc.y);
+                ofVertex(trione_blc.x, trione_blc.y);
             ofEndShape();
-            
         ofPopMatrix();
     }
 
