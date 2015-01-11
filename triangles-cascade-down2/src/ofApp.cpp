@@ -80,61 +80,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    
-//    for (int i=0; i<=squaretotalX; i++) {
-//        for (int j=0; j<=squaretotalY; j++) {
-//            ofPushMatrix();
-//            ofTranslate(square*i, square*j);
-//                // TRI ONE
-//                ofSetColor(colors[c]);
-//                ofBeginShape();
-//                    ofVertex(stlc.x, stlc.y);
-//                    ofVertex(strc.x, strc.y);
-//                    ofVertex(sblc.x, sblc.y);
-//                ofEndShape();
-//                
-//                ofSetColor(previouscolor);
-//                ofBeginShape();
-//                    ofVertex(trione_tlc.x, trione_tlc.y);
-//                    ofVertex(trione_trc.x, trione_trc.y);
-//                    ofVertex(trione_blc.x, trione_blc.y);
-//                ofEndShape();
-//                
-//                // TRI TWO
-//                ofSetColor(tritwo_colors[2]);
-//                ofBeginShape();
-//                    ofVertex(tritwo_sbrc);
-//                    ofVertex(tritwo_sblc);
-//                    ofVertex(tritwo_strc);
-//                ofEndShape();
-//            
-//            ofPopMatrix();
-//        }
-//    }
-    
-    
-//    for (int k=0; k<=batch; k++) {
-//        for (int l=(batch-k); l>=0; l--) {
-//            ofPushMatrix();
-//            ofTranslate(square*k, square*l);
-//                ofSetColor(colors[c]);
-//                    ofBeginShape();
-//                    ofVertex(stlc.x, stlc.y);
-//                    ofVertex(strc.x, strc.y);
-//                    ofVertex(sblc.x, sblc.y);
-//                ofEndShape();
-//                
-//                ofSetColor(previouscolor);
-//                ofBeginShape();
-//                    ofVertex(trione_tlc.x, trione_tlc.y);
-//                    ofVertex(trione_trc.x, trione_trc.y);
-//                    ofVertex(trione_blc.x, trione_blc.y);
-//                ofEndShape();
-//
-//            ofPopMatrix();
-//        }
-//    }
-    
     //sequential
     for (int i=0; i<=squaretotalX; i++) {
         for (int j=0; j<=squaretotalY; j++) {
