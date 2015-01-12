@@ -13,8 +13,8 @@ void ofApp::setup(){
     
     //grid
     square = 176; //176, 16, 44
-    squaretotalX = ofGetWidth() / square;
-    squaretotalY = ofGetHeight()/ square;
+    xsquares = ofGetWidth() / square;
+    ysquares = ofGetHeight()/ square;
     center.set(square/2, square/2);
     
     
@@ -34,17 +34,16 @@ void ofApp::setup(){
     tritwo_colors[2] = ofColor(244,244,245); //lightgrey
     tritwo_previouscolor.set(tritwo_colors[0]);
     
-    //shapes
-    trione_tlc.set(0, 0);
-    trione_trc.set(square,0);
-    trione_blc.set(0, square);
-    stlc.set(0, 0);
-    strc.set(square, 0);
-    sblc.set(0, square);
+    //Æ
+        //static
+        stlc.set(0, 0);
+        strc.set(square, 0);
+        sblc.set(0, square);
+        sbrc.set(square, square);
     
-    tritwo_trc.set(square,0); tritwo_strc.set(square, 0);
-    tritwo_blc.set(0, square); tritwo_sblc.set(0, square);
-    tritwo_brc.set(square, square); tritwo_sbrc.set(square, square);
+        //dynamic
+        dynamictopleft.set(stlc);
+        dynamicbottomright.set(sbrc);
     
     //batch
     batch = 0;
@@ -55,11 +54,11 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    trione_tlc.x+=5;
-    trione_tlc.y+=5;
+    dynamictopleft.x+=5;
+    dynamictopleft.y+=5;
     
-    if (trione_tlc.y > center.y) {
-        trione_tlc.set(0, 0);
+    if (dynamictopleft.y > center.y) {
+        dynamictopleft.set(0, 0);
         stateswitch = true;
         batch++;
         batchprev++;
@@ -69,11 +68,7 @@ void ofApp::update(){
         stateswitch = false;
         previouscolor.set(colors[c]);
         tritwo_previouscolor.set(tritwo_colors[c]);
-        if (c<4) {
-            c++;
-        } else{
-            c=0;
-        }
+        if (c<4) { c++; } else{ c=0; }
     }
 }
 
@@ -81,26 +76,25 @@ void ofApp::update(){
 void ofApp::draw(){
     
     //sequential
-    for (int i=0; i<=squaretotalX; i++) {
-        for (int j=0; j<=squaretotalY; j++) {
+    for (int i=0; i<=xsquares; i++) {
+        for (int j=0; j<=ysquares; j++) {
             ofPushMatrix();
             ofTranslate(square*i, square*j);
-                // TRI ONE
+                //top
                 ofSetColor(colors[2]);
                 ofBeginShape();
-                    ofVertex(stlc.x, stlc.y);
-                    ofVertex(strc.x, strc.y);
-                    ofVertex(sblc.x, sblc.y);
+                    ofVertex(stlc);
+                    ofVertex(strc);
+                    ofVertex(sblc);
                 ofEndShape();
 
-                // TRI TWO
+                //bottom
                 ofSetColor(colors[2]);
                 ofBeginShape();
-                    ofVertex(tritwo_sbrc);
-                    ofVertex(tritwo_sblc);
-                    ofVertex(tritwo_strc);
+                    ofVertex(sbrc);
+                    ofVertex(sblc);
+                    ofVertex(strc);
                 ofEndShape();
-            
             ofPopMatrix();
         }
     }
@@ -111,9 +105,9 @@ void ofApp::draw(){
             ofTranslate(square*k, square*l);
                 ofSetColor(colors[1]);
                     ofBeginShape();
-                    ofVertex(stlc.x, stlc.y);
-                    ofVertex(strc.x, strc.y);
-                    ofVertex(sblc.x, sblc.y);
+                    ofVertex(stlc);
+                    ofVertex(strc);
+                    ofVertex(sblc);
                 ofEndShape();
             ofPopMatrix();
         }
@@ -126,17 +120,17 @@ void ofApp::draw(){
             //static
             ofSetColor(colors[1]);
             ofBeginShape();
-                ofVertex(stlc.x, stlc.y);
-                ofVertex(strc.x, strc.y);
-                ofVertex(sblc.x, sblc.y);
+                ofVertex(stlc);
+                ofVertex(strc);
+                ofVertex(sblc);
             ofEndShape();
         
             //dynamic
             ofSetColor(colors[2]);
             ofBeginShape();
-                ofVertex(trione_tlc.x, trione_tlc.y);
-                ofVertex(trione_trc.x, trione_trc.y);
-                ofVertex(trione_blc.x, trione_blc.y);
+                ofVertex(dynamictopleft);
+                ofVertex(strc);
+                ofVertex(sblc);
             ofEndShape();
         ofPopMatrix();
     }

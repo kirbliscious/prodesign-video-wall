@@ -18,11 +18,12 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        int square, squaretotalX, squaretotalY;
-        ofPoint center;
-        ofPoint trione_tlc, trione_trc, trione_blc;
-        ofPoint tritwo_trc, tritwo_brc, tritwo_blc, tritwo_strc, tritwo_sbrc, tritwo_sblc;
+        int square, xsquares, ysquares;
+        ofPoint dynamictopleft, dynamicbottomright;
         ofPoint stlc, strc, sblc, sbrc;
+    
+        ofPoint center;
+    
         ofColor colors[5];
         ofColor tritwo_colors[5];
         ofColor previouscolor, tritwo_previouscolor;
