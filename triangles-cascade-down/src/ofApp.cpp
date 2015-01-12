@@ -4,6 +4,7 @@
 void ofApp::setup(){
     ofSetWindowShape(2816, 1408);
     ofSetFrameRate(29);
+    ofSetBackgroundColor(29, 209, 130);
     
     state1 = true;
     state2 = false;
@@ -13,13 +14,14 @@ void ofApp::setup(){
     
     //grid
     square = 176; //176, 16, 44
-    squaretotalX = ofGetWidth() / square;
-    squaretotalY = ofGetHeight()/ square;
+    xsquares = ofGetWidth() / square;
+    ysquares = ofGetHeight()/ square;
     center.set(square/2, square/2);
     
     
     //colors
-    c = 1;
+    c = 2;
+    c2 = 3;
     colors[0] = ofColor(0,188,227); //blue
     colors[1] = ofColor(20,35,51); //navy
     colors[2] = ofColor(29,209,130); //green
@@ -27,92 +29,108 @@ void ofApp::setup(){
     colors[4] = ofColor(244,244,245); //lightgrey
     previouscolor.set(colors[0]);
     
-    tritwo_colors[3] = ofColor(0,188,227); //blue
-    tritwo_colors[4] = ofColor(20,35,51); //navy
-    tritwo_colors[0] = ofColor(29,209,130); //green
-    tritwo_colors[1] = ofColor(232,232,232); //grey
-    tritwo_colors[2] = ofColor(244,244,245); //lightgrey
-    tritwo_previouscolor.set(tritwo_colors[0]);
+    //Æ
+        //static
+        stlc.set(0, 0);
+        strc.set(square, 0);
+        sblc.set(0, square);
+        sbrc.set(square, square);
     
-    //shapes
-    trione_tlc.set(0, 0);
-    trione_trc.set(square,0);
-    trione_blc.set(0, square);
-    stlc.set(0, 0);
-    strc.set(square, 0);
-    sblc.set(0, square);
+        //dynamic
+        dynamictopleft.set(stlc);
+        dynamicbottomright.set(sbrc);
     
-    tritwo_trc.set(square,0); tritwo_strc.set(square, 0);
-    tritwo_blc.set(0, square); tritwo_sblc.set(0, square);
-    tritwo_brc.set(square, square); tritwo_sbrc.set(square, square);
-    
-
+    //batch
+    batch = 0;
+    batchprev = -1;
     
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    trione_tlc.x++;
-    trione_tlc.y++;
+    dynamictopleft.x+=5;
+    dynamictopleft.y+=5;
     
-    if (trione_tlc.y > center.y) {
-        trione_tlc.set(0, 0);
-        stateswitch = true;
+    if (dynamictopleft.y > center.y) {
+        dynamictopleft.set(0, 0);
+        batch++;
+        batchprev++;
+    }
+    
+    if (batch == 20) {
+        batch = 0;
+        batchprev = 0;
+        if (c2<4) { c=c2; c2++; } else { c=c2; c2=0; }
     }
     
     if (stateswitch) {
-        stateswitch = false;
-        previouscolor.set(colors[c]);
-        tritwo_previouscolor.set(tritwo_colors[c]);
-        if (c<4) {
-            c++;
-        } else{
-            c=0;
-        }
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    
-    for (int i=0; i<=squaretotalX; i++) {
-        for (int j=0; j<=squaretotalY; j++) {
+    //sequential
+    for (int i=0; i<=xsquares; i++) {
+        for (int j=0; j<=ysquares; j++) {
             ofPushMatrix();
             ofTranslate(square*i, square*j);
-                // TRI ONE
+                //top
                 ofSetColor(colors[c]);
                 ofBeginShape();
-                    ofVertex(stlc.x, stlc.y);
-                    ofVertex(strc.x, strc.y);
-                    ofVertex(sblc.x, sblc.y);
+                    ofVertex(stlc);
+                    ofVertex(strc);
+                    ofVertex(sblc);
                 ofEndShape();
-                
-                ofSetColor(previouscolor);
+
+                //bottom
+                ofSetColor(colors[2]);
                 ofBeginShape();
-                    ofVertex(trione_tlc.x, trione_tlc.y);
-                    ofVertex(trione_trc.x, trione_trc.y);
-                    ofVertex(trione_blc.x, trione_blc.y);
+                    ofVertex(sbrc);
+                    ofVertex(sblc);
+                    ofVertex(strc);
                 ofEndShape();
-                
-                // TRI TWO
-                ofSetColor(tritwo_colors[2]);
-                ofBeginShape();
-                    ofVertex(tritwo_sbrc);
-                    ofVertex(tritwo_sblc);
-                    ofVertex(tritwo_strc);
-                ofEndShape();
-                
-//                ofSetColor(tritwo_previouscolor);
-//                ofBeginShape();
-//                    ofVertex(tritwo_brc);
-//                    ofVertex(tritwo_blc);
-//                    ofVertex(tritwo_trc);
-//                ofEndShape();
             ofPopMatrix();
         }
     }
+    
+    for (int k=0; k<=batchprev; k++) {
+        for (int l=(batchprev-k); l>=0; l--) {
+            ofPushMatrix();
+            ofTranslate(square*k, square*l);
+                ofSetColor(colors[c2]);
+                    ofBeginShape();
+                    ofVertex(stlc);
+                    ofVertex(strc);
+                    ofVertex(sblc);
+                ofEndShape();
+            ofPopMatrix();
+        }
+    }
+
+    
+    for (int k=0; k<=batch; k++) {
+        ofPushMatrix();
+        ofTranslate(square*k, square*(batch-k));
+            //reveal
+            ofSetColor(colors[c2]);
+            ofBeginShape();
+                ofVertex(stlc);
+                ofVertex(strc);
+                ofVertex(sblc);
+            ofEndShape();
+        
+            //dynamic
+            ofSetColor(colors[c]);
+            ofBeginShape();
+                ofVertex(dynamictopleft);
+                ofVertex(strc);
+                ofVertex(sblc);
+            ofEndShape();
+        ofPopMatrix();
+    }
+
 }
 
 //--------------------------------------------------------------
